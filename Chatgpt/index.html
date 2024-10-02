@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Item Form</title>
+    <link rel="stylesheet" href="style.css"> <!-- Optional: Include your CSS file if you have one -->
+</head>
+<body>
+    <h1>Add Menu Item</h1>
+    <form id="menuItemForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+        
+        <label for="taste">Taste:</label>
+        <input type="text" id="taste" name="taste" required>
+        
+        <label for="isDrink">Is it a drink?</label>
+        <select id="isDrink" name="isDrink" required>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        
+        <label for="num_sales">Number of Sales:</label>
+        <input type="number" id="num_sales" name="num_sales" required>
+        
+        <button type="submit">Add Menu Item</button>
+    </form>
+
+    <script>
+        document.getElementById('menuItemForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/menu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                alert('Menu item added successfully: ' + JSON.stringify(result));
+            } catch (error) {
+                alert('Error adding menu item: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
